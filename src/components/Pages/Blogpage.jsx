@@ -1,9 +1,11 @@
-import { useState,useEffect } from "react"
-import { Link, useSearchParams } from "react-router-dom";
+
+import { Suspense } from "react";
+import { Link, useSearchParams, useLoaderData,  Await } from "react-router-dom";
 import { BlogFilter } from "../BlogFilter";
 
 const Blogpage = () => {
-  const [posts, setPost] = useState([]);
+  // const [posts, setPost] = useState([]);
+  const { posts } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   
   const postQuery = searchParams.get('post') || '';
@@ -32,11 +34,11 @@ const Blogpage = () => {
     
   // }
   
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(response => response.json('')
-        .then(date => setPost(date)))
-  },[])
+  // useEffect(() => {
+  //   fetch('https://jsonplaceholder.typicode.com/posts')
+  //     .then(response => response.json('')
+  //       .then(date => setPost(date)))
+  // },[])
   
 
 
@@ -53,7 +55,28 @@ const Blogpage = () => {
           </label>
             <input type='submit' value='Search' />
         </form> */}
-        <Link to ='/posts/new' >Page Path</Link>
+        <Link to='/posts/new' >Page Path</Link>
+        
+        <Suspense fallback={<h2>Loading...</h2>}>
+          <Await resolve={posts}>
+            {
+              (resolvedPost) => (
+                <>        
+                   {
+                     resolvedPost.filter(
+                     post => post.title.includes(postQuery) && post.id >= startsForm
+                    ).map(post => (
+                     <Link key={post.id} to={`/posts/${post.id}`}>
+                       <li>{post.title }</li>
+                     </Link>
+                      ))
+                   }
+                </>
+)
+            }
+          </Await>
+        </Suspense>
+{/*         
         {
           posts.filter(
             post => post.title.includes(postQuery) && post.id >= startsForm
@@ -62,11 +85,24 @@ const Blogpage = () => {
               <li>{post.title }</li>
             </Link>
              ))
-        }
+        } */}
     
     </div>
     </>
   )
 }
 
-export { Blogpage }
+async function getPost() {
+   const resp = await fetch('https://jsonplaceholder.typicode.com/posts');
+  return resp.json();
+}
+
+const blogLoader = async () => {
+  // console.log(request, params);
+  return  {
+    posts: getPost()
+  }
+ 
+}
+
+export { Blogpage, blogLoader  }

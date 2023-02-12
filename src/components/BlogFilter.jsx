@@ -27,7 +27,7 @@ const BlogFilter = ({postQuery, latest, setSearchParams} ) => {
   }
 
   return (
-    <form autocomplete='off' onSubmit={handleSubmit}>
+    <form autoComplete='off' onSubmit={handleSubmit}>
           <input type='search' name='search' value={search} onChange={e => setSearch(e.target.value)} />
       
           <label style={{ padding: '0 1rem' }}>
