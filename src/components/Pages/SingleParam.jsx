@@ -3,12 +3,13 @@ import {Link,useNavigate, useLoaderData, Await, useAsyncValue } from "react-rout
 // import { useState, useEffect } from "react";
 
 
-const Post = () => {
+const Post = (id) => {
   const post = useAsyncValue();
   return(
     <>
       <h1>{post.title}</h1>
-       <p>{post.body }</p>
+      <p>{post.body}</p>
+      {/* <Link to= {`/posts/${id}/edit`}>Edit this post</Link> */}
   </>
   )
 }
@@ -58,7 +59,7 @@ const SingleParam = () => {
           <Comments/>
         </Await>
       </Suspense>
-      <Link key={post.id} to={`/posts/${post.id}`}></Link>
+      <Link key={post.id} to={`/posts/${post.id}/edit`}>Edit this post</Link>
        
     
     

@@ -1,6 +1,6 @@
 
 import { Suspense } from "react";
-import { Link, useSearchParams, useLoaderData,  Await } from "react-router-dom";
+import { Link, useSearchParams, useLoaderData,  Await, json } from "react-router-dom";
 import { BlogFilter } from "../BlogFilter";
 
 const Blogpage = () => {
@@ -93,14 +93,21 @@ const Blogpage = () => {
 }
 
 async function getPost() {
-   const resp = await fetch('https://jsonplaceholder.typicode.com/posts');
+  const resp = await fetch('https://jsonplaceholder.typicode.com/posts');
+  // if (!resp.ok) {
+  //   throw new Response('',{status: resp.status, statusText: 'Not found!!!'})
+  // }
   return resp.json();
 }
 
 const blogLoader = async () => {
+  const posts = getPost();
   // console.log(request, params);
+  if (!posts) {
+    throw json({message: 'Not found', reason: 'Worn url'}, {status: 404})
+  }
   return  {
-    posts: getPost()
+    posts
   }
  
 }
