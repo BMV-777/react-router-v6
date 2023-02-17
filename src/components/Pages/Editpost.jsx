@@ -29,7 +29,7 @@ const updatePostAction = async ({ request }) => {
   const formData = await request.formData();
   
   if (!formData.get('title') || !formData.get('body')) {
-    return {message: "Должны заполненые все поля!!!"}
+    return {message: "Должны заполненые все поля!!! "}
   }
   
   const updatedPost = await updatePost(formData);
